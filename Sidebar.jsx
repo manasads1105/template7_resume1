@@ -10,6 +10,9 @@ import {
   Upload,
   Sparkles,
   Save,
+  FileUp,
+  Wand2,
+  FilePenLine,
 } from "lucide-react";
 
 export default function Sidebar({
@@ -27,16 +30,14 @@ export default function Sidebar({
   shareContent,
 }) {
   const [showEnhanceOptions, setShowEnhanceOptions] = useState(false);
+  const [showUploadOptions, setShowUploadOptions] = useState(false);
 
   const handleShareClick = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: "My Resume",
-          text: shareContent,
-        });
+        await navigator.share({ title: "My Resume", text: shareContent });
         alert("Resume shared successfully!");
-      } catch (err) {
+      } catch {
         alert("Sharing failed or cancelled.");
       }
     } else {
@@ -85,8 +86,39 @@ export default function Sidebar({
         <Eye size={18} /> Preview Resume
       </button>
 
+      <div className="relative">
+        <button
+          onClick={() => setShowUploadOptions(!showUploadOptions)}
+          className="w-full flex items-center justify-center gap-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+        >
+          <FileUp size={18} /> Upload Resume
+        </button>
+        {showUploadOptions && (
+          <div className="absolute z-10 mt-1 bg-white dark:bg-gray-700 shadow-lg rounded w-full text-left">
+            <button
+              onClick={onEdit}
+              className="w-full px-4 py-2 text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2"
+            >
+              <FilePenLine size={14} /> Manual Edit
+            </button>
+            <button
+              onClick={onEdit}
+              className="w-full px-4 py-2 text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2"
+            >
+              <Wand2 size={14} /> AI Edit
+            </button>
+            <button
+              onClick={() => onAIEnhance("all")}
+              className="w-full px-4 py-2 text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2"
+            >
+              <Sparkles size={14} /> AI Enhance
+            </button>
+          </div>
+        )}
+      </div>
+
       <button
-        onClick={() => setShowEnhanceOptions((prev) => !prev)}
+        onClick={() => setShowEnhanceOptions(!showEnhanceOptions)}
         className="w-full flex items-center justify-center gap-2 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
       >
         <Bot size={18} /> AI Assistant
