@@ -12,12 +12,20 @@ function App() {
   const [resumeData, setResumeData] = useState({
     name: "Manasa D S",
     contact: "manasads939@gmail.com | linkedin.com/in/manasads | GitHub: manasads1105",
-    objective: "To learn and contribute to team projects, and gain practical experience while enhancing organizational success.",
-    education: "- B.Tech (CSE), PES University, Bangalore (2025)\n- PU (PCMB), SAM PU College (2021)\n- SSLC, SFS Public School (2019)",
-    projects: "- Fire, Smoke, and Gas Detector Alarm using Arduino\n- Portfolio website using HTML/CSS/JS",
-    experience: "- Intern at ABC Tech\n- Freelance Web Developer",
-    skills: "Python, Java, C++, MySQL, HTML, CSS, JavaScript, React",
-    interests: "Singing, Sketching, Cooking, Farming",
+    objective:
+      "To learn and contribute to team projects, and gain practical experience while enhancing organizational success.",
+    education: [
+      "B.Tech (CSE), PES University, Bangalore (2025)",
+      "PU (PCMB), SAM PU College (2021)",
+      "SSLC, SFS Public School (2019)",
+    ],
+    projects: [
+      "Fire, Smoke, and Gas Detector Alarm using Arduino",
+      "Portfolio website using HTML/CSS/JS",
+    ],
+    experience: ["Intern at ABC Tech", "Freelance Web Developer"],
+    skills: ["Python", "Java", "C++", "HTML", "CSS", "React"],
+    interests: ["Singing", "Sketching", "Cooking", "Farming"],
   });
 
   const handleFieldChange = (key, value) => {
@@ -41,16 +49,61 @@ function App() {
     reader.readAsDataURL(file);
   };
 
-  const enhanceSection = (key) => {
-    const enhancements = {
-      education: "\n- Attended machine learning workshops and technical seminars.",
-      projects: "\n- Built an AI-powered resume enhancer using React and Tailwind.",
-      experience: "\n- Contributed to open-source projects and remote internships.",
-      skills: ", Tailwind CSS, Git, Figma, REST APIs",
-      interests: ", UI/UX Design, Reading Tech Blogs",
+  const handleAIEnhance = (section) => {
+    const updates = {
+      education: [
+        "B.Tech in Computer Science, PES University (2025)",
+        "Pre-University in PCMB, SAM PU College (2021)",
+        "SSLC, SFS Public School (2019)",
+      ],
+      projects: [
+        "Designed an IoT-based Fire, Smoke, and Gas Detection System using Arduino",
+        "Built a personal portfolio website using HTML, CSS, and JavaScript",
+      ],
+      experience: [
+        "Software Development Intern at ABC Tech, worked on full-stack features",
+        "Freelanced building responsive websites for local businesses",
+      ],
+      skills: ["React", "Node.js", "MongoDB", "TypeScript", "Tailwind CSS", "Git"],
+      interests: ["UI/UX Design", "AI Research", "Open Source Contributions", "Hiking"],
+      all: {
+        objective:
+          "To contribute meaningfully to innovative tech projects while enhancing my skills in software development.",
+        education: [
+          "B.Tech in Computer Science, PES University (2025)",
+          "Pre-University in PCMB, SAM PU College (2021)",
+          "SSLC, SFS Public School (2019)",
+        ],
+        projects: [
+          "IoT-based Fire & Gas Detection System using Arduino & Sensors",
+          "Modern portfolio site using HTML/CSS/JS with animations",
+        ],
+        experience: [
+          "Web Developer Intern at ABC Tech, built responsive interfaces",
+          "Freelance Web Developer – Delivered 5+ client projects",
+        ],
+        skills: ["JavaScript", "React", "Python", "Git", "Firebase", "Node.js"],
+        interests: ["Art", "Sketching", "Hiking", "Volunteering"],
+      },
     };
-    handleFieldChange(key, resumeData[key] + enhancements[key]);
+
+    if (section === "all") {
+      setResumeData((prev) => ({ ...prev, ...updates.all }));
+    } else {
+      setResumeData((prev) => ({ ...prev, [section]: updates[section] || prev[section] }));
+    }
   };
+
+  // NEW: Save resume data JSON to localStorage and trigger download
+  const handleSave = () => {
+  const element = document.getElementById("resume");
+  if (!element) {
+    alert("Resume not found!");
+    return;
+  }
+  html2pdf().from(element).save("resume-saved.pdf");
+};
+
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
@@ -60,31 +113,12 @@ function App() {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
-  const shareContent = `
-Name: ${resumeData.name}
-Contact: ${resumeData.contact}
-
-Career Objective:
-${resumeData.objective}
-
-Education:
-${resumeData.education}
-
-Projects:
-${resumeData.projects}
-
-Experience:
-${resumeData.experience}
-
-Skills:
-${resumeData.skills}
-
-Interests:
-${resumeData.interests}
-`.trim();
-
   return (
-    <div className={`${theme === "dark" ? "bg-gray-950" : "bg-gray-100"} min-h-screen transition`}>
+    <div
+      className={`${
+        theme === "dark" ? "bg-gray-950" : "bg-gray-100"
+      } min-h-screen transition`}
+    >
       <div className="max-w-9xl mx-auto py-6 px-4 flex gap-7">
         <div className="w-1/4 sticky top-6 self-start h-full">
           <Sidebar
@@ -92,17 +126,16 @@ ${resumeData.interests}
             onEdit={() => setIsEditing(true)}
             onPreview={() => setIsEditing(false)}
             onDownload={handleDownload}
-            onSave={handleDownload} // use same function for Save to Documents
             onUploadProfileImage={handleUploadProfileImage}
-            onAIEnhance={enhanceSection}
+            onAIEnhance={handleAIEnhance}
+            onSave={handleSave}  
             isEditing={isEditing}
             theme={theme}
             toggleTheme={toggleTheme}
             font={font}
-            shareContent={shareContent}
+            shareContent="Resume Content"
           />
         </div>
-
         <div className="w-3/4">
           <Resume
             data={resumeData}
