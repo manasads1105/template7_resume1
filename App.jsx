@@ -41,12 +41,13 @@ function App() {
     html2pdf().from(element).save("resume.pdf");
   };
 
-  const handleUploadProfileImage = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setProfileImage(reader.result);
-    reader.readAsDataURL(file);
+  const handleSave = () => {
+    const element = document.getElementById("resume");
+    if (!element) {
+      alert("Resume not found!");
+      return;
+    }
+    html2pdf().from(element).save("resume-saved.pdf");
   };
 
   const handleAIEnhance = (section) => {
@@ -94,17 +95,6 @@ function App() {
     }
   };
 
-  // NEW: Save resume data JSON to localStorage and trigger download
-  const handleSave = () => {
-  const element = document.getElementById("resume");
-  if (!element) {
-    alert("Resume not found!");
-    return;
-  }
-  html2pdf().from(element).save("resume-saved.pdf");
-};
-
-
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
@@ -114,11 +104,7 @@ function App() {
   }, [theme]);
 
   return (
-    <div
-      className={`${
-        theme === "dark" ? "bg-gray-950" : "bg-gray-100"
-      } min-h-screen transition`}
-    >
+    <div className={`${theme === "dark" ? "bg-gray-950" : "bg-gray-100"} min-h-screen transition`}>
       <div className="max-w-9xl mx-auto py-6 px-4 flex gap-7">
         <div className="w-1/4 sticky top-6 self-start h-full">
           <Sidebar
@@ -126,9 +112,8 @@ function App() {
             onEdit={() => setIsEditing(true)}
             onPreview={() => setIsEditing(false)}
             onDownload={handleDownload}
-            onUploadProfileImage={handleUploadProfileImage}
+            onSave={handleSave}
             onAIEnhance={handleAIEnhance}
-            onSave={handleSave}  
             isEditing={isEditing}
             theme={theme}
             toggleTheme={toggleTheme}
