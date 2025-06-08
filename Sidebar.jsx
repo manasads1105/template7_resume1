@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import {
-  Moon,
-  Sun,
   Download,
   Edit3,
   Eye,
   Bot,
   Share2,
-  Upload,
+  FileUp,
   Sparkles,
   Save,
-  FileUp,
-  Wand2,
   FilePenLine,
+  Wand2,
 } from "lucide-react";
 
 export default function Sidebar({
@@ -24,7 +21,7 @@ export default function Sidebar({
   onAIEnhance,
   isEditing,
   theme,
-  toggleTheme,
+  // toggleTheme, // removed since no toggle button
   font,
   shareContent,
 }) {
@@ -166,21 +163,6 @@ export default function Sidebar({
           <option value="font-playfair">Playfair Display</option>
         </select>
       </div>
-
-      <button
-        onClick={toggleTheme}
-        className="w-full mt-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-      >
-        {theme === "light" ? (
-          <span className="flex items-center gap-2">
-            <Moon size={16} /> Dark Mode
-          </span>
-        ) : (
-          <span className="flex items-center gap-2">
-            <Sun size={16} /> Light Mode
-          </span>
-        )}
-      </button>
     </div>
   );
 }
