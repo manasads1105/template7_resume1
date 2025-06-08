@@ -21,7 +21,6 @@ export default function Sidebar({
   onPreview,
   onDownload,
   onSave,
-  onUploadProfileImage,
   onAIEnhance,
   isEditing,
   theme,
@@ -145,13 +144,6 @@ export default function Sidebar({
       >
         <Share2 size={18} /> Share Resume
       </button>
-
-      <label className="w-full">
-        <div className="w-full flex items-center justify-center gap-2 bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 cursor-pointer mt-4">
-          <Upload size={18} /> Upload Photo
-        </div>
-        <input type="file" accept="image/*" className="hidden" onChange={onUploadProfileImage} />
-      </label>
 
       <div className="mt-4">
         <label htmlFor="font-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
